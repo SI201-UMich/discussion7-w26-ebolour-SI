@@ -25,18 +25,28 @@ def load_listings(f):
                 - Values (str): Corresponding values from that row
                   (NOTE: All values are strings, including numbers, which means you will need to convert them in later functions)
     """
+    
+
     # Do not modify this code
     # This opens the CSV and saves it as a list of lists
     base_path = os.path.abspath(os.path.dirname(__file__))
     full_path = os.path.join(base_path, f)
 
     # TODO: Read the CSV using csv.reader and convert it to a list a dictionaries
-    open('new_york_listings_2024.csv', 'w', newline='')
-    list_file = 
+    listings_list = []
+    
+    with open(full_path, 'r', encoding='utf-8') as inFile:
+        csv_reader = csv.DictReader(inFile)
+        
+        for row in csv_reader:
+            listings_list.append(dict(row))
+            
+    return listings_list
 
 
 
-    d = {}
+
+
     
 ###############################################################################
 ##### TASK 2: CALCULATION FUNCTION (single calculation)
@@ -56,7 +66,32 @@ def calculate_avg_price_by_neighbourhood_group_and_room(listings):
         dict mapping (neighbourhood_group, room_type) -> average_price (float)
         e.g. { ('Downtown', 'Entire home/apt'): 123.45, ... }
     """
-    pass
+def calculate_avg_price_by_neighbourhood_group_and_room(listings):
+    # 1. Initialize dictionaries to store sums and counts
+    sums = {}
+    counts = {}
+
+    for row in listings:
+        group = row['neighbourhood_group']
+        room = row['room_type']
+        price = float(row['price'])
+        
+        key = (group, room)
+
+        # 4. Update the running totals
+        if key not in sums:
+            sums[key] = 0.0
+            counts[key] = 0
+            
+        sums[key] += price
+        counts[key] += 1
+
+    # 5. Calculate the final averages
+    averages = {}
+    for key in sums:
+        averages[key] = sums[key] / counts[key]
+
+    return averages        
 
 
 
@@ -78,7 +113,8 @@ def write_summary_csv(out_filename, avg_prices):
         None
             Writes a CSV file with header: neighbourhood_group, room_type, average_price
     """
-    pass
+    
+    
 
 ###############################################################################
 ##### UNIT TESTS (Do not modify the code below!)
